@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+
 np.random.seed(2)
 
 
@@ -35,8 +36,12 @@ def transform_data(df, features):
     :param features: list of 2 features from the dataframe
     :return: transformed data as numpy array of shape (n, 2)
     """
-    pass
-    # return data
+    transformed_data = df[features].to_numpy()
+    for i in range(2):
+        transformed_data[:, i] = (transformed_data[:, i] - np.min(transformed_data[:, i])) / np.sum(
+            transformed_data[:, i])
+    transformed_data = add_noise(transformed_data)
+    return transformed_data
 
 
 def kmeans(data, k):
@@ -48,8 +53,37 @@ def kmeans(data, k):
     * labels - numpy array of size n, where each entry is the predicted label (cluster number)
     * centroids - numpy array of shape (k, 2), centroid for each cluster.
     """
-    pass
-    # return labels, centroids
+
+    last_centroids = choose_initial_centroids(data, k)
+    labels = get_labels(data, last_centroids, k)
+    centroids = new_centroids(k, data, labels)
+    while not np.array_equal(last_centroids, centroids):
+        last_centroids = centroids
+        labels = get_labels(data, last_centroids, k)
+        centroids = new_centroids(k, data, labels)
+    return labels, centroids
+
+
+def get_labels(data, centroids, k):
+    labels = np.zeros((len(data)))
+    for i in range(len(data)):
+        min_index = 0
+        min_dist = dist(data[i], centroids[0])
+        for j in range(1, k):
+            this_dist = dist(data[i], centroids[j])
+            if this_dist < min_dist:
+                min_index = j
+                min_dist = this_dist
+        labels[i] = min_index
+    return labels
+
+
+def new_centroids(k, data, labels):
+    new_centroids_array = np.zeros((k, 2))
+    for i in range(k):
+        for l in range(2):
+            new_centroids_array[i][l] = np.array([data[j][l] for j in range(len(data)) if labels[j] == i]).mean()
+    return new_centroids_array
 
 
 def visualize_results(data, labels, centroids, path):
@@ -71,7 +105,7 @@ def dist(x, y):
     :param y: numpy array of size n
     :return: the euclidean distance
     """
-    pass
+    return np.linalg.norm(x - y)
     # return distance
 
 
@@ -96,4 +130,3 @@ def recompute_centroids(data, labels, k):
     """
     pass
     # return centroids
-
