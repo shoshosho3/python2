@@ -55,27 +55,13 @@ def kmeans(data, k):
     """
 
     last_centroids = choose_initial_centroids(data, k)
-    labels = get_labels(data, last_centroids, k)
+    labels = assign_to_clusters(data, last_centroids)
     centroids = recompute_centroids(data, labels, k)
     while not np.array_equal(last_centroids, centroids):
         last_centroids = centroids
-        labels = get_labels(data, last_centroids, k)
+        labels = assign_to_clusters(data, last_centroids)
         centroids = recompute_centroids(data, labels, k)
     return labels, centroids
-
-
-def get_labels(data, centroids, k):
-    labels = np.zeros((len(data)))
-    for i in range(len(data)):
-        min_index = 0
-        min_dist = dist(data[i], centroids[0])
-        for j in range(1, k):
-            this_dist = dist(data[i], centroids[j])
-            if this_dist < min_dist:
-                min_index = j
-                min_dist = this_dist
-        labels[i] = min_index
-    return labels
 
 
 def visualize_results(data, labels, centroids, path):
@@ -115,7 +101,17 @@ def assign_to_clusters(data, centroids):
     :param centroids: current centroids as numpy array of shape (k, 2)
     :return: numpy array of size n
     """
-    pass
+    labels = np.zeros((len(data)))
+    for i in range(len(data)):
+        min_index = 0
+        min_dist = dist(data[i], centroids[0])
+        for j in range(1, len(centroids)):
+            this_dist = dist(data[i], centroids[j])
+            if this_dist < min_dist:
+                min_index = j
+                min_dist = this_dist
+        labels[i] = min_index
+    return labels
     # return labels
 
 
