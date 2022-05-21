@@ -56,11 +56,11 @@ def kmeans(data, k):
 
     last_centroids = choose_initial_centroids(data, k)
     labels = get_labels(data, last_centroids, k)
-    centroids = new_centroids(k, data, labels)
+    centroids = recompute_centroids(data, labels, k)
     while not np.array_equal(last_centroids, centroids):
         last_centroids = centroids
         labels = get_labels(data, last_centroids, k)
-        centroids = new_centroids(k, data, labels)
+        centroids = recompute_centroids(data, labels, k)
     return labels, centroids
 
 
@@ -76,14 +76,6 @@ def get_labels(data, centroids, k):
                 min_dist = this_dist
         labels[i] = min_index
     return labels
-
-
-def new_centroids(k, data, labels):
-    new_centroids_array = np.zeros((k, 2))
-    for i in range(k):
-        for l in range(2):
-            new_centroids_array[i][l] = np.array([data[j][l] for j in range(len(data)) if labels[j] == i]).mean()
-    return new_centroids_array
 
 
 def visualize_results(data, labels, centroids, path):
@@ -135,5 +127,9 @@ def recompute_centroids(data, labels, k):
     :param k: number of clusters
     :return: numpy array of shape (k, 2)
     """
-    pass
+    new_centroids_array = np.zeros((k, 2))
+    for i in range(k):
+        for l in range(2):
+            new_centroids_array[i][l] = np.array([data[j][l] for j in range(len(data)) if labels[j] == i]).mean()
+    return new_centroids_array
     # return centroids
