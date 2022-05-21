@@ -3,10 +3,9 @@ import data
 import numpy as np
 
 if __name__ == '__main__':
-
     # part A
     print("Part A: ")
-    df_all = data.load_data("hw2/london_sample_500.csv")
+    df_all = data.load_data("hw1/london.csv")
     data.add_new_columns(df_all)
     data.data_analysis(df_all)
 
@@ -14,14 +13,17 @@ if __name__ == '__main__':
 
     # part B
     print("Part B: ")
-    df_all = data.load_data("hw2/london_sample_500.csv")
+    df_all = data.load_data("hw1/london.csv")
     np1 = clustering.transform_data(df_all, ["cnt", "hum"])
     print("k = 2")
-    print(np.array_str(clustering.kmeans(np1, 2)[1], precision=3, suppress_small=True))
-    #print(clustering.kmeans(np, 2)[1])
+    clusters = clustering.kmeans(np1, 2)
+    print(np.array_str(clusters[1], precision=3, suppress_small=True))
+    clustering.visualize_results(np1, clusters[0], clusters[1], "hw2/plot2")
     print("\nk = 3")
-    #print(clustering.kmeans(np1, 3)[1])
-    print(np.array_str(clustering.kmeans(np1, 3)[1], precision=3, suppress_small=True))
+    clusters = clustering.kmeans(np1, 3)
+    print(np.array_str(clusters[1], precision=3, suppress_small=True))
+    clustering.visualize_results(np1, clusters[0], clusters[1], "hw2/plot3")
     print("\nk = 5")
-    #print(clustering.kmeans(np1, 5)[1])
-    print(np.array_str(clustering.kmeans(np1, 5)[1], precision=3, suppress_small=True))
+    clusters = clustering.kmeans(np1, 5)
+    print(np.array_str(clusters[1], precision=3, suppress_small=True))
+    clustering.visualize_results(np1, clusters[0], clusters[1], "hw2/plot5")
