@@ -37,7 +37,7 @@ def transform_data(df, features):
     :return: transformed data as numpy array of shape (n, 2)
     """
     transformed_data = df[features].to_numpy()
-    for i in range(2):
+    for i in range(2):  # scaling
         transformed_data[:, i] = (transformed_data[:, i] - np.min(transformed_data[:, i])) / np.sum(
             transformed_data[:, i])
     transformed_data = add_noise(transformed_data)
@@ -57,7 +57,7 @@ def kmeans(data, k):
     last_centroids = choose_initial_centroids(data, k)
     labels = assign_to_clusters(data, last_centroids)
     centroids = recompute_centroids(data, labels, k)
-    while not np.array_equal(last_centroids, centroids):
+    while not np.array_equal(last_centroids, centroids):  # runs until clusters don't change
         last_centroids = centroids
         labels = assign_to_clusters(data, last_centroids)
         centroids = recompute_centroids(data, labels, k)
@@ -112,7 +112,6 @@ def assign_to_clusters(data, centroids):
                 min_dist = this_dist
         labels[i] = min_index
     return labels
-    # return labels
 
 
 def recompute_centroids(data, labels, k):
@@ -125,7 +124,6 @@ def recompute_centroids(data, labels, k):
     """
     new_centroids_array = np.zeros((k, 2))
     for i in range(k):
-        for l in range(2):
-            new_centroids_array[i][l] = np.array([data[j][l] for j in range(len(data)) if labels[j] == i]).mean()
+        for col in range(2):
+            new_centroids_array[i][col] = np.array([data[j][col] for j in range(len(data)) if labels[j] == i]).mean()
     return new_centroids_array
-    # return centroids
