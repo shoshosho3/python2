@@ -6,7 +6,7 @@ import numpy as np
 def main():
     # part A
     print("Part A: ")
-    df_all = data.load_data("hw2/london_sample_500.csv")
+    df_all = data.load_data("london.csv")
     data.add_new_columns(df_all)
     data.data_analysis(df_all)
 
@@ -14,7 +14,7 @@ def main():
 
     # part B
     print("Part B: ")
-    df_all = data.load_data("hw2/london_sample_500.csv")
+    df_all = data.load_data("london.csv")
     transformed_data = clustering.transform_data(df_all, ["cnt", "hum"])
     activate_kmeans(2, transformed_data)
     print()
@@ -33,7 +33,7 @@ def activate_kmeans(k, in_data):
     print(f"k = {k}")
     clusters = clustering.kmeans(in_data, k)
     print(np.array_str(clusters[1], precision=3, suppress_small=True))
-    clustering.visualize_results(in_data, clusters[0], clusters[1], f"hw2/plot{k}")
+    clustering.visualize_results(in_data, clusters[0], clusters[1], f"plot{k}")
 
 
 if __name__ == '__main__':
